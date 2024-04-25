@@ -1,8 +1,10 @@
-public static class ArraysTester {
+public static class ArraysTester
+{
     /// <summary>
     /// Entry point for the tests
     /// </summary>
-    public static void Run() {
+    public static void Run()
+    {
         // Sample Test Cases (may not be comprehensive)
         Console.WriteLine("\n=========== PROBLEM 1 TESTS ===========");
         double[] multiples = MultiplesOf(7, 5);
@@ -39,9 +41,20 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        // Create new array to hold the multiples
+        double[] multiples = new double[length];
+
+        // Loop 'length' amount of times
+        for (int i = 0; i < length; i++)
+        {
+            // Do the math and add the answer to the array.
+            multiples[i] = number * (i + 1);
+        }
+
+        // Return the array
+        return multiples; // replace this return statement with your own
     }
-    
+
     /// <summary>
     /// Rotate the 'data' to the right by the 'amount'.  For example, if the data is 
     /// <c>&lt;List&gt;{1, 2, 3, 4, 5, 6, 7, 8, 9}</c> and an amount is 3 then the list returned should be 
@@ -57,5 +70,20 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
+        // Setup additional counter
+        int counter = 0;
+
+        // Loop over the list starting from the amount given
+        for (int i = data.Count - amount; i < data.Count; i++)
+        {
+            // Do Insert the data from the starting location to the start of the list incrementing on each loop to keep the order
+            data.Insert(counter, data[i]);
+
+            // Remove the data from the original location
+            data.RemoveAt(data[i + 1]);
+
+            // Increment the counter so we know where to insert the next item
+            counter++;
+        }
     }
 }
