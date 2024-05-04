@@ -1,4 +1,7 @@
-﻿public class PriorityQueue {
+﻿using System.ComponentModel;
+
+public class PriorityQueue
+{
     private List<PriorityItem> _queue = new();
 
     /// <summary>
@@ -8,12 +11,14 @@
     /// </summary>
     /// <param name="value">The value</param>
     /// <param name="priority">The priority</param>
-    public void Enqueue(string value, int priority) {
+    public void Enqueue(string value, int priority)
+    {
         var newNode = new PriorityItem(value, priority);
         _queue.Add(newNode);
     }
 
-    public String Dequeue() {
+    public String Dequeue()
+    {
         if (_queue.Count == 0) // Verify the queue is not empty
         {
             Console.WriteLine("The queue is empty.");
@@ -22,31 +27,39 @@
 
         // Find the index of the item with the highest priority to remove
         var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++) {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+        for (int index = 0; index < _queue.Count; index++)
+        {
+            if (_queue[index].Priority > _queue[highPriorityIndex].Priority)
                 highPriorityIndex = index;
+
         }
 
         // Remove and return the item with the highest priority
         var value = _queue[highPriorityIndex].Value;
+        // Console.WriteLine($"Removing {value}");
+        _queue.RemoveAt(highPriorityIndex);
         return value;
     }
 
-    public override string ToString() {
+    public override string ToString()
+    {
         return $"[{string.Join(", ", _queue)}]";
     }
 }
 
-internal class PriorityItem {
+internal class PriorityItem
+{
     internal string Value { get; set; }
     internal int Priority { get; set; }
 
-    internal PriorityItem(string value, int priority) {
+    internal PriorityItem(string value, int priority)
+    {
         Value = value;
         Priority = priority;
     }
 
-    public override string ToString() {
+    public override string ToString()
+    {
         return $"{Value} (Pri:{Priority})";
     }
 }
