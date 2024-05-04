@@ -30,7 +30,7 @@ public static class Priority
 
         // Test 2
         // Scenario: Add items with the same priority
-        // Expected Result: should remove items in order of insertion, Tim, Sue, Bob
+        // Expected Result: should remove items in order or priority then insertion for items with the same priority, expecting Tim, Sue, Bob, Alice
         Console.WriteLine("Test 2");
         priorityQueue.Enqueue("Bob", 2);
         priorityQueue.Enqueue("Tim", 5);
@@ -41,7 +41,7 @@ public static class Priority
         Trace.Assert(priorityQueue.Dequeue() == "Sue", "Expected Sue");
         Trace.Assert(priorityQueue.Dequeue() == "Bob", "Expected Bob");
         Trace.Assert(priorityQueue.Dequeue() == "Alice", "Expected Alice");
-        // Defect(s) Found: Needed to remove the = in the if statement of teh dequeue method
+        // Defect(s) Found: Needed to remove the = in the if statement of the dequeue method
 
         Console.WriteLine("---------");
 
