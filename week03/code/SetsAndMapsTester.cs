@@ -1,7 +1,9 @@
 using System.Text.Json;
 
-public static class SetsAndMapsTester {
-    public static void Run() {
+public static class SetsAndMapsTester
+{
+    public static void Run()
+    {
         // Problem 1: Find Pairs with Sets
         Console.WriteLine("\n=========== Finding Pairs TESTS ===========");
         DisplayPairs(new[] { "am", "at", "ma", "if", "fi" });
@@ -29,7 +31,7 @@ public static class SetsAndMapsTester {
         // Problem 2: Degree Summary
         // Sample Test Cases (may not be comprehensive) 
         Console.WriteLine("\n=========== Census TESTS ===========");
-        Console.WriteLine(string.Join(", ", SummarizeDegrees("census.txt")));
+        Console.WriteLine(string.Join(", ", SummarizeDegrees("../../../census.txt")));
         // Results may be in a different order:
         // <Dictionary>{[Bachelors, 5355], [HS-grad, 10501], [11th, 1175],
         // [Masters, 1723], [9th, 514], [Some-college, 7291], [Assoc-acdm, 1067],
@@ -107,10 +109,35 @@ public static class SetsAndMapsTester {
     /// that there were no duplicates) and therefore should not be displayed.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
-    private static void DisplayPairs(string[] words) {
+    private static void DisplayPairs(string[] words)
+    {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+
+        HashSet<string> wordSet = new HashSet<string>(words);
+        HashSet<string> wordPairs = new HashSet<string>();
+
+        // loop over the words
+        foreach (var word in words)
+        {
+            // Generate the reverse of the current word
+            string reversedWord = new string(word.Reverse().ToArray());
+
+            // check if the reversed word exists in the set and it's not itself
+            if (word != reversedWord && wordSet.Contains(reversedWord))
+            {
+                // make sure each pair is only printed once
+                if (!wordPairs.Contains(word))
+                {
+                    Console.WriteLine($"{word} & {reversedWord}");
+                    // add matching words to wordPairs
+                    wordPairs.Add(word);
+                    wordPairs.Add(reversedWord);
+                }
+            }
+        }
+
     }
 
     /// <summary>
@@ -127,11 +154,27 @@ public static class SetsAndMapsTester {
     /// #############
     /// # Problem 2 #
     /// #############
-    private static Dictionary<string, int> SummarizeDegrees(string filename) {
+    private static Dictionary<string, int> SummarizeDegrees(string filename)
+    {
         var degrees = new Dictionary<string, int>();
-        foreach (var line in File.ReadLines(filename)) {
+        foreach (var line in File.ReadLines(filename))
+        {
             var fields = line.Split(",");
             // Todo Problem 2 - ADD YOUR CODE HERE
+
+            //  get degree
+            var degree = fields[3];
+            // Console.WriteLine(degree);
+
+            // check if degree is in the dictionary and increment the value if it exists or add it if it doesn't
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree]++;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
@@ -156,15 +199,63 @@ public static class SetsAndMapsTester {
     /// #############
     /// # Problem 3 #
     /// #############
-    private static bool IsAnagram(string word1, string word2) {
+    private static bool IsAnagram(string word1, string word2)
+    {
+        Dictionary<string, string> word1Dict = new Dictionary<string, string>();
         // Todo Problem 3 - ADD YOUR CODE HERE
+
+        // convert both words to lowercase
+        word1 = word1.ToLower();
+        word2 = word2.ToLower();
+
+        // remove spaces from both words
+        word1 = word1.Replace(" ", "");
+        word2 = word2.Replace(" ", "");
+
+        // add each letter of the first word to the dictionary
+        foreach (var letter in word1)
+        {
+            if (word1Dict.ContainsKey(letter.ToString()))
+            {
+                word1Dict[letter.ToString()] += letter.ToString();
+            }
+            else
+            {
+                word1Dict[letter.ToString()] = letter.ToString();
+            }
+        }
+
+        //remove each letter of the second word from the dictionary
+        foreach (var letter in word2)
+        {
+            if (word1Dict.ContainsKey(letter.ToString()))
+            {
+                word1Dict[letter.ToString()] = word1Dict[letter.ToString()].Remove(0, 1);
+                if (word1Dict[letter.ToString()] == "")
+                {
+                    word1Dict.Remove(letter.ToString());
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // check if the dictionary is empty then the words are anagrams
+        if (word1Dict.Count == 0)
+        {
+            return true;
+        }
+
         return false;
     }
 
     /// <summary>
     /// Sets up the maze dictionary for problem 4
     /// </summary>
-    private static Dictionary<ValueTuple<int, int>, bool[]> SetupMazeMap() {
+    private static Dictionary<ValueTuple<int, int>, bool[]> SetupMazeMap()
+    {
         Dictionary<ValueTuple<int, int>, bool[]> map = new() {
             { (1, 1), new[] { false, true, false, true } },
             { (1, 2), new[] { false, true, true, false } },
@@ -220,7 +311,8 @@ public static class SetsAndMapsTester {
     /// https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
     /// 
     /// </summary>
-    private static void EarthquakeDailySummary() {
+    private static void EarthquakeDailySummary()
+    {
         const string uri = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
         using var client = new HttpClient();
         using var getRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
