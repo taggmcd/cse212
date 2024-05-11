@@ -11,6 +11,8 @@
  * Each row represents the player's stats for a single season with a single team.
  */
 
+using System.Numerics;
+using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 
 public class Basketball
@@ -19,18 +21,37 @@ public class Basketball
     {
         var players = new Dictionary<string, int>();
 
-        using var reader = new TextFieldParser("basketball.csv");
+        using var reader = new TextFieldParser("C:\\Users\\fun_l.DESKTOP-JD5OICG\\school\\cse212\\week03\\teach\\Basketball.csv");
         reader.TextFieldType = FieldType.Delimited;
         reader.SetDelimiters(",");
         reader.ReadFields(); // ignore header row
-        while (!reader.EndOfData) {
+        while (!reader.EndOfData)
+        {
             var fields = reader.ReadFields()!;
             var playerId = fields[0];
             var points = int.Parse(fields[8]);
+            if (players.ContainsKey(playerId))
+            {
+                players[playerId] += points;
+            }
+            else
+            {
+                players[playerId] = points;
+            }
         }
+        // convert map to array
+        var playersArray = players.ToArray();
+        Array.Sort(playersArray, (a, b) => b.Value - a.Value);
 
-        Console.WriteLine($"Players: {{{string.Join(", ", players)}}}");
+        // Console.WriteLine($"Players: {{{string.Join(", ", players)}}}");
 
         var topPlayers = new string[10];
+        // Console.WriteLine(playersArray);
+        for (var i = 0; i < 10; ++i)
+        {
+            topPlayers[i] = playersArray[i].Key;
+            Console.WriteLine(topPlayers[i] + " " + playersArray[i].Value);
+        }
+
     }
 }
